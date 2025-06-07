@@ -1,0 +1,6 @@
+@MbtaService_HostAddress = http://localhost:5283
+
+GET {{MbtaService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
