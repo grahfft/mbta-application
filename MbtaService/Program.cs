@@ -6,6 +6,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<IMbtaRepository, MbtaRepository>();
+builder.Services.AddSingleton<IMbtaCache, MbtaCache>();
+builder.Services.AddSingleton<IMbtaService, MbtaService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
