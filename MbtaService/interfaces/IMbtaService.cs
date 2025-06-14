@@ -1,4 +1,4 @@
-public interface IMbtaService 
+public interface IMbtaService
 {
-
+    public Task<List<string>> GetRoutesAsync();
 }

@@ -7,8 +7,8 @@ public class MbtaService : IMbtaService
         this.mbtaCache = mbtaCache;
     }
 
-    public static void LoadCache()
+    public async Task<List<string>> GetRoutesAsync()
     {
-        
+        return await this.mbtaCache.GetAllRoutesAsync();
     }
 }

@@ -12,27 +12,27 @@ public class RouteController : ControllerBase
         this.mbtaService = mbtaService;
     }
 
-    // [Route("/Routes")]
-    // [HttpGet]
-    // public async Task<ActionResult<List<string>>> GetRoutes()
-    // {
-    //     try
-    //     {
-    //         return await this.mbtaService.
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         var problemDetails = new ProblemDetails
-    //         {
-    //             Status = (int)HttpStatusCode.InternalServerError,
-    //             Title = "Internal Server Error",
-    //             Detail = ex.Message,
-    //         };
+    [Route("/Routes")]
+    [HttpGet]
+    public async Task<ActionResult<List<string>>> GetRoutes()
+    {
+        try
+        {
+            return await this.mbtaService.GetRoutesAsync();
+        }
+        catch (Exception ex)
+        {
+            var problemDetails = new ProblemDetails
+            {
+                Status = (int)HttpStatusCode.InternalServerError,
+                Title = "Internal Server Error",
+                Detail = ex.Message,
+            };
 
-    //         return new ObjectResult(problemDetails)
-    //         {
-    //             StatusCode = (int)HttpStatusCode.InternalServerError
-    //         };
-    //     }
-    // }
+            return new ObjectResult(problemDetails)
+            {
+                StatusCode = (int)HttpStatusCode.InternalServerError
+            };
+        }
+    }
 }
