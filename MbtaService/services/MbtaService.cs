@@ -11,4 +11,9 @@ public class MbtaService : IMbtaService
     {
         return await this.mbtaCache.GetAllRoutesAsync();
     }
+
+    public async Task<List<Stop>> GetStopsByRouteIdAsync(string routeId)
+    {
+        return await this.mbtaCache.GetAllStopsForRouteAsync(routeId);
+    }
 }

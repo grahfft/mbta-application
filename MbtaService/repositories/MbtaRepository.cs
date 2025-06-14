@@ -1,13 +1,34 @@
 
 public class MbtaRepository : IMbtaRepository
 {
-    public Task<List<Route>> GetRoutesAsync(string routeId)
+    public List<Route> GetRoutesAsync(string routeId)
     {
-        throw new NotImplementedException();
+        return new List<Route>()
+        {
+            new Route() { Id = "First" },
+            new Route() { Id = "Second" }
+        };
     }
 
-    public Task<List<Stop>> GetStopsAsync(string routeId)
+    public List<Stop> GetStopsAsync(string routeId)
     {
-        throw new NotImplementedException();
+        if (routeId == "First")
+        {
+            return new List<Stop>()
+            {
+                new Stop() { Id = "First_Stop_1", attributes = new Attributes() { latitude = 0.0, longitude=0.0} },
+                new Stop() { Id = "First_Stop_2", attributes = new Attributes() { latitude = 1.0, longitude=1.0} }
+            };
+        }
+        else if (routeId == "Second")
+        {
+            return new List<Stop>()
+            {
+                new Stop() { Id = "Second_Stop_1", attributes = new Attributes() { latitude = 0.0, longitude=0.0} },
+                new Stop() { Id = "Second_Stop_2", attributes = new Attributes() { latitude = 1.0, longitude=1.0} }
+            };
+        }
+
+        return new List<Stop>();
     }
 }

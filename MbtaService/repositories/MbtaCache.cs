@@ -28,7 +28,7 @@ public class MbtaCache : IMbtaCache
         var routeIds = this.routes.Keys.ToList();
         if (routeIds.Count == 0)
         {
-            var mbtaRoutes = await this.mbtaRepository.GetRoutesAsync();
+            var mbtaRoutes = this.mbtaRepository.GetRoutesAsync();
             mbtaRoutes.ForEach(route =>
             {
                 routes.Add(route.Id, new List<Stop>());
@@ -59,7 +59,7 @@ public class MbtaCache : IMbtaCache
 
     private async Task LoadCache()
     {
-        var mbtaRoutes = await this.mbtaRepository.GetRoutesAsync();
+        var mbtaRoutes = this.mbtaRepository.GetRoutesAsync();
         mbtaRoutes.ForEach(async route =>
         {
             var mbtaStops = await this.LoadStops(route.Id);
@@ -72,7 +72,7 @@ public class MbtaCache : IMbtaCache
     private async Task<List<Stop>> LoadStops(string routeId)
     {
         var mbtaStops = new List<Stop>();
-        var allStops = await this.mbtaRepository.GetStopsAsync(routeId);
+        var allStops = this.mbtaRepository.GetStopsAsync(routeId);
         allStops.ForEach(stop =>
         {
             var currentStop = stop;
