@@ -6,4 +6,9 @@ public class MbtaService : IMbtaService
     {
         this.mbtaCache = mbtaCache;
     }
+
+    public static void LoadCache()
+    {
+        
+    }
 }
