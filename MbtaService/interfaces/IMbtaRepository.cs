@@ -1,6 +1,6 @@
 public interface IMbtaRepository
 {
-    public List<Route> GetRoutesAsync(string routeId = "");
+    public Task<List<Route>> GetRoutesAsync(string routeId = "");
 
-    public List<Stop> GetStopsAsync(string routeId);
+    public Task<List<Stop>> GetStopsAsync(string routeId);
 }

@@ -25,18 +25,7 @@ public class MbtaCache : IMbtaCache
             await this.LoadCache();
         }
 
-        var routeIds = this.routes.Keys.ToList();
-        if (routeIds.Count == 0)
-        {
-            var mbtaRoutes = this.mbtaRepository.GetRoutesAsync();
-            mbtaRoutes.ForEach(route =>
-            {
-                routes.Add(route.Id, new List<Stop>());
-                routeIds.Add(route.Id);
-            });
-        }
-
-        return routeIds;
+        return this.routes.Keys.ToList();
     }
 
     public async Task<List<Stop>> GetAllStopsForRouteAsync(string routeId)
@@ -59,7 +48,7 @@ public class MbtaCache : IMbtaCache
 
     private async Task LoadCache()
     {
-        var mbtaRoutes = this.mbtaRepository.GetRoutesAsync();
+        var mbtaRoutes = await this.mbtaRepository.GetRoutesAsync();
         mbtaRoutes.ForEach(async route =>
         {
             var mbtaStops = await this.LoadStops(route.Id);
@@ -72,7 +61,8 @@ public class MbtaCache : IMbtaCache
     private async Task<List<Stop>> LoadStops(string routeId)
     {
         var mbtaStops = new List<Stop>();
-        var allStops = this.mbtaRepository.GetStopsAsync(routeId);
+        var allStops = await this.mbtaRepository.GetStopsAsync(routeId);
+        Stop previousStop = null;
         allStops.ForEach(stop =>
         {
             var currentStop = stop;
@@ -82,8 +72,27 @@ public class MbtaCache : IMbtaCache
                 currentStop = stop;
             }
 
+            if (previousStop != null)
+            {
+                var previousConnection = new Connection()
+                {
+                    RouteId = routeId,
+                    StopId = previousStop.Id,
+                };
+
+                var currentConnection = new Connection()
+                {
+                    RouteId = routeId,
+                    StopId = currentStop.Id,
+                };
+
+                currentStop.Connections.Add(previousConnection);
+                previousStop.Connections.Add(currentConnection);
+            }
+            
             currentStop.Routes.Add(routeId);
             mbtaStops.Add(currentStop);
+            previousStop = currentStop;
         });
 
         return mbtaStops;
