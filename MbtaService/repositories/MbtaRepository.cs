@@ -1,7 +1,7 @@
 
 public class MbtaRepository : IMbtaRepository
 {
-    public Task<List<Route>> GetRoutesAsync(string routeId)
+    public Task<List<Route>> GetRoutesAsync()
     {
         var routeList = new List<Route>()
         {

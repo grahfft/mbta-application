@@ -1,8 +1,8 @@
-public class MbtaService : IMbtaService
+public class RouteService : IRouteService
 {
     private IMbtaCache mbtaCache;
 
-    public MbtaService(IMbtaCache mbtaCache)
+    public RouteService(IMbtaCache mbtaCache)
     {
         this.mbtaCache = mbtaCache;
     }

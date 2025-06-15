@@ -8,7 +8,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IMbtaRepository, MbtaRepository>();
 builder.Services.AddSingleton<IMbtaCache, MbtaCache>();
-builder.Services.AddSingleton<IMbtaService, MbtaService>();
+builder.Services.AddSingleton<IRouteService, RouteService>();
 
 var app = builder.Build();
 
