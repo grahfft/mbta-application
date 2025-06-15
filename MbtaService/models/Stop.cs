@@ -1,8 +1,8 @@
 public class Stop
 {
-    public required string Id { get; set; }
+    public required string id { get; set; }
 
-    public required Attributes Attributes { get; set; }
+    public required Attributes attributes { get; set; }
 
     public List<string> Routes { get; set; } = new List<string>();
 
@@ -20,4 +20,9 @@ public class Connection
     public string RouteId { get; set; }
 
     public string StopId { get; set; }
+}
+
+public class StopsData
+{
+    public List<Stop> data { get; set; }
 }

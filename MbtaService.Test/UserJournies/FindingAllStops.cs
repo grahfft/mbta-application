@@ -12,19 +12,19 @@ public class FindingAllStops
     public async Task UserWantsToFindAllStops()
     {
         var expectedStop = "First_Stop_1";
-        var firstRoute = new Route() { Id = "First" };
-        var secondRoute = new Route() { Id = "Second" };
+        var firstRoute = new Route() { id = "First" };
+        var secondRoute = new Route() { id = "Second" };
 
         var firstRoute_stopList = new List<Stop>()
         {
-            new Stop() { Id = expectedStop, Attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
-            new Stop() { Id = "First_Stop_2", Attributes = new Attributes() { Latitude = 1.0, Longitude=1.0} }
+            new Stop() { id = expectedStop, attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
+            new Stop() { id = "First_Stop_2", attributes = new Attributes() { Latitude = 1.0, Longitude=1.0} }
         };
 
         var secondRoute_stopList = new List<Stop>()
         {
-            new Stop() { Id = expectedStop, Attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
-            new Stop() { Id = "Second_Stop_2", Attributes = new Attributes() { Latitude = -1.0, Longitude=-1.0} }
+            new Stop() { id = expectedStop, attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
+            new Stop() { id = "Second_Stop_2", attributes = new Attributes() { Latitude = -1.0, Longitude=-1.0} }
         };
 
         var routeList = new List<Route>()
@@ -38,10 +38,10 @@ public class FindingAllStops
             .Setup(mock => mock.GetRoutesAsync())
             .Returns(Task.FromResult(routeList));
         mockMbtaRepo
-            .Setup(mock => mock.GetStopsAsync(firstRoute.Id))
+            .Setup(mock => mock.GetStopsAsync(firstRoute.id))
             .Returns(Task.FromResult(firstRoute_stopList));
         mockMbtaRepo
-            .Setup(mock => mock.GetStopsAsync(secondRoute.Id))
+            .Setup(mock => mock.GetStopsAsync(secondRoute.id))
             .Returns(Task.FromResult(secondRoute_stopList));
 
         var mbtaCache = new MbtaCache(mockMbtaRepo.Object);
@@ -53,7 +53,7 @@ public class FindingAllStops
 
         Assert.Equal(2, actualStopList.Value.Count);
 
-        var actualStop = actualStopList.Value.Find(stop => stop.Id.Equals(expectedStop));
+        var actualStop = actualStopList.Value.Find(stop => stop.id.Equals(expectedStop));
         Assert.NotNull(actualStop);
         Assert.Equal(2, actualStop.Connections.Count);
         Assert.Equal(2, actualStop.Routes.Count);

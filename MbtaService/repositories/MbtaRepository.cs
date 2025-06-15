@@ -1,37 +1,65 @@
+using System.Web;
 
 public class MbtaRepository : IMbtaRepository
 {
-    public Task<List<Route>> GetRoutesAsync()
-    {
-        var routeList = new List<Route>()
-        {
-            new Route() { Id = "First" },
-            new Route() { Id = "Second" }
-        };
+    private HttpClient client;
 
-        return Task.FromResult(routeList);
+    private const string ROUTE_BASE = "https://api-v3.mbta.com/routes";
+
+    private const string STOPS_BASE = "https://api-v3.mbta.com/stops";
+
+    public MbtaRepository()
+    {
+        this.client = new HttpClient();
     }
 
-    public Task<List<Stop>> GetStopsAsync(string routeId)
+    public async Task<List<Route>> GetRoutesAsync()
     {
-        var stopList = new List<Stop>();
-        if (routeId == "First")
+        var uriBuilder = new UriBuilder(ROUTE_BASE);
+        var parameters = HttpUtility.ParseQueryString(string.Empty);
+
+        parameters["page[offset]"] = "0";
+        parameters["page[limit]"] = "50";
+        parameters["filter[type]"] = "0,1";
+        parameters["api_key"] = Environment.GetEnvironmentVariable("MbtaApiKey");
+
+        uriBuilder.Query = parameters.ToString();
+        var uri = uriBuilder.Uri;
+
+        var response = await this.client.GetAsync(uri);
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var routeData = System.Text.Json.JsonSerializer.Deserialize<RouteData>(jsonResponse);
+
+        if (routeData == null)
         {
-            stopList = new List<Stop>()
-            {
-                new Stop() { Id = "First_Stop_1", Attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
-                new Stop() { Id = "First_Stop_2", Attributes = new Attributes() { Latitude = 1.0, Longitude=1.0} }
-            };
-        }
-        else if (routeId == "Second")
-        {
-            stopList = new List<Stop>()
-            {
-                new Stop() { Id = "First_Stop_1", Attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
-                new Stop() { Id = "Second_Stop_2", Attributes = new Attributes() { Latitude = 1.0, Longitude=1.0} }
-            };
+            throw new Exception("Unable to parse MBTA response");
         }
 
-        return Task.FromResult(stopList);
+        return routeData.data;
+    }
+
+    public async Task<List<Stop>> GetStopsAsync(string routeId)
+    {
+        var uriBuilder = new UriBuilder(STOPS_BASE);
+        var parameters = HttpUtility.ParseQueryString(string.Empty);
+
+        parameters["page[offset]"] = "0";
+        parameters["page[limit]"] = "50";
+        parameters["filter[route]"] = routeId;
+        parameters["api_key"] = Environment.GetEnvironmentVariable("MbtaApiKey");
+
+        uriBuilder.Query = parameters.ToString();
+        var uri = uriBuilder.Uri;
+
+        var response = await this.client.GetAsync(uri);
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var stopData = System.Text.Json.JsonSerializer.Deserialize<StopsData>(jsonResponse);
+
+        if (stopData == null)
+        {
+            throw new Exception("Unable to parse MBTA response");
+        }
+
+        return stopData.data;
     }
 }

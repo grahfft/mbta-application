@@ -18,7 +18,7 @@ public class MbtaCacheTests
         Assert.Equal(2, routeList.Count);
         expectedRoutes.ForEach(route =>
         {
-            Assert.Contains(route.Id, routeList);
+            Assert.Contains(route.id, routeList);
         });
     }
 
@@ -29,8 +29,8 @@ public class MbtaCacheTests
 
         this.expectedRoutes.ForEach(async route =>
         {
-            var stopList = await cache.GetAllStopsForRouteAsync(route.Id);
-            var expectedStop = stopList.Find(stop => stop.Id == EXPECTED_STOP);
+            var stopList = await cache.GetAllStopsForRouteAsync(route.id);
+            var expectedStop = stopList.Find(stop => stop.id == EXPECTED_STOP);
 
             Assert.NotNull(expectedStop);
             Assert.Equal(2, expectedStop.Routes.Count);
@@ -44,8 +44,8 @@ public class MbtaCacheTests
 
         this.expectedRoutes.ForEach(async route =>
         {
-            var stopList = await cache.GetAllStopsForRouteAsync(route.Id);
-            var expectedStop = stopList.Find(stop => stop.Id == EXPECTED_STOP);
+            var stopList = await cache.GetAllStopsForRouteAsync(route.id);
+            var expectedStop = stopList.Find(stop => stop.id == EXPECTED_STOP);
 
             Assert.NotNull(expectedStop);
             Assert.Equal(2, expectedStop.Connections.Count);
@@ -55,8 +55,8 @@ public class MbtaCacheTests
      [Fact]
     public async Task LoadCache_ThrowExceptionIfUnableToFindStopLis()
     {
-        var firstRoute = new Route() { Id = "First" };
-        var secondRoute = new Route() { Id = "Second" };
+        var firstRoute = new Route() { id = "First" };
+        var secondRoute = new Route() { id = "Second" };
 
         this.expectedRoutes = new List<Route>()
         {
@@ -66,8 +66,8 @@ public class MbtaCacheTests
 
         var firstRoute_stopList = new List<Stop>()
         {
-            new Stop() { Id = EXPECTED_STOP, Attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
-            new Stop() { Id = "First_Stop_2", Attributes = new Attributes() { Latitude = 1.0, Longitude=1.0} }
+            new Stop() { id = EXPECTED_STOP, attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
+            new Stop() { id = "First_Stop_2", attributes = new Attributes() { Latitude = 1.0, Longitude=1.0} }
         };
 
         var routeList = new List<Route>()
@@ -80,17 +80,17 @@ public class MbtaCacheTests
             .Setup(mock => mock.GetRoutesAsync())
             .Returns(Task.FromResult(routeList));
         mockMbtaRepo
-            .Setup(mock => mock.GetStopsAsync(firstRoute.Id))
+            .Setup(mock => mock.GetStopsAsync(firstRoute.id))
             .Returns(Task.FromResult(firstRoute_stopList));
 
         var cache = new MbtaCache(mockMbtaRepo.Object);
-        await Assert.ThrowsAsync<KeyNotFoundException>(() => cache.GetAllStopsForRouteAsync(secondRoute.Id));
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => cache.GetAllStopsForRouteAsync(secondRoute.id));
     }
 
     private MbtaCache createCache()
     {
-        var firstRoute = new Route() { Id = "First" };
-        var secondRoute = new Route() { Id = "Second" };
+        var firstRoute = new Route() { id = "First" };
+        var secondRoute = new Route() { id = "Second" };
 
         this.expectedRoutes = new List<Route>()
         {
@@ -100,14 +100,14 @@ public class MbtaCacheTests
 
         var firstRoute_stopList = new List<Stop>()
         {
-            new Stop() { Id = EXPECTED_STOP, Attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
-            new Stop() { Id = "First_Stop_2", Attributes = new Attributes() { Latitude = 1.0, Longitude=1.0} }
+            new Stop() { id = EXPECTED_STOP, attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
+            new Stop() { id = "First_Stop_2", attributes = new Attributes() { Latitude = 1.0, Longitude=1.0} }
         };
 
         var secondRoute_stopList = new List<Stop>()
         {
-            new Stop() { Id = EXPECTED_STOP, Attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
-            new Stop() { Id = "Second_Stop_2", Attributes = new Attributes() { Latitude = -1.0, Longitude=-1.0} }
+            new Stop() { id = EXPECTED_STOP, attributes = new Attributes() { Latitude = 0.0, Longitude=0.0} },
+            new Stop() { id = "Second_Stop_2", attributes = new Attributes() { Latitude = -1.0, Longitude=-1.0} }
         };
 
         var routeList = new List<Route>()
@@ -121,10 +121,10 @@ public class MbtaCacheTests
             .Setup(mock => mock.GetRoutesAsync())
             .Returns(Task.FromResult(routeList));
         mockMbtaRepo
-            .Setup(mock => mock.GetStopsAsync(firstRoute.Id))
+            .Setup(mock => mock.GetStopsAsync(firstRoute.id))
             .Returns(Task.FromResult(firstRoute_stopList));
         mockMbtaRepo
-            .Setup(mock => mock.GetStopsAsync(secondRoute.Id))
+            .Setup(mock => mock.GetStopsAsync(secondRoute.id))
             .Returns(Task.FromResult(secondRoute_stopList));
 
         return new MbtaCache(mockMbtaRepo.Object);
