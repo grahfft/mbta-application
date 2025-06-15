@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 public class RouteController : ControllerBase
 {
-    private IMbtaService mbtaService;
+    private IRouteService mbtaService;
 
-    public RouteController(IMbtaService mbtaService)
+    public RouteController(IRouteService mbtaService)
     {
         this.mbtaService = mbtaService;
     }

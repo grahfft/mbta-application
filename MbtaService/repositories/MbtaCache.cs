@@ -39,8 +39,7 @@ public class MbtaCache : IMbtaCache
 
         if (!this.routes.TryGetValue(routeId, out stopsOnRoute))
         {
-            stopsOnRoute = await this.LoadStops(routeId);
-            this.routes.Add(routeId, stopsOnRoute);
+            throw new KeyNotFoundException("Route Id had no stops in the cache");
         }
 
         return stopsOnRoute;
