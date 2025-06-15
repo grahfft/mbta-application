@@ -50,8 +50,8 @@ public class MbtaCache : IMbtaCache
         var mbtaRoutes = await this.mbtaRepository.GetRoutesAsync();
         mbtaRoutes.ForEach(async route =>
         {
-            var mbtaStops = await this.LoadStops(route.Id);
-            this.routes.Add(route.Id, mbtaStops);
+            var mbtaStops = await this.LoadStops(route.id);
+            this.routes.Add(route.id, mbtaStops);
         });
 
         this.isCacheLoaded = true;
@@ -65,9 +65,9 @@ public class MbtaCache : IMbtaCache
         allStops.ForEach(stop =>
         {
             var currentStop = stop;
-            if (!this.stops.TryGetValue(stop.Id, out currentStop))
+            if (!this.stops.TryGetValue(stop.id, out currentStop))
             {
-                this.stops.Add(stop.Id, stop);
+                this.stops.Add(stop.id, stop);
                 currentStop = stop;
             }
 
@@ -76,13 +76,13 @@ public class MbtaCache : IMbtaCache
                 var previousConnection = new Connection()
                 {
                     RouteId = routeId,
-                    StopId = previousStop.Id,
+                    StopId = previousStop.id,
                 };
 
                 var currentConnection = new Connection()
                 {
                     RouteId = routeId,
-                    StopId = currentStop.Id,
+                    StopId = currentStop.id,
                 };
 
                 currentStop.Connections.Add(previousConnection);

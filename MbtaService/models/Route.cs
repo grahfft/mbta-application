@@ -1,4 +1,9 @@
 public class Route
 {
-    public required string Id { get; set; }
+    public string id { get; set; }
+}
+
+public class RouteData
+{
+    public List<Route> data { get; set; }
 }
